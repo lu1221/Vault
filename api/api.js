@@ -12,29 +12,22 @@
 
 // Import file system class for file IOs
 var CLS_fs = require( 'fs' );
-var CLS_path = require( 'path' );
+// Import xml2js node module for xml parsing
+var parseXML = require('xml2js').parseString;
 
 // Export api list
 var exports = module.exports = {};
 
 // apis definitions
 var getTags = function () {
-	// Set up search path
-	var path = '.';
+	// WARNING: <TEMP> hard-coded path
+	var path = '../database/tag.xml';
 
-	// Read file name from current directory
-	CLS_fs.readdir(path, function(err, items) {
-		for (var i=0; i<items.length; i++) {
-			// Do not record files with non-csv extension
-			// ## Assumption ## No files in the format of ##.##.*
-			var lc_exttype = 'csv';
-			// Remove the . in the file extension prior to extension verification
-			var lc_fileext = CLS_path.extname( items[i] ).replace(/\./g, '');
-			// Verify extension
-			if( lc_fileext.indexOf(lc_exttype) !== -1 ) {
-				console.log(items[i]);
-			}
-		}
+	// Read Tag.xml
+	CLS_fs.readFile(path, 'utf8', function(err, data) {
+		// Tag.xml content is now stored in data through callback
+		// console.log(data);
+		//
 	});
 }
 

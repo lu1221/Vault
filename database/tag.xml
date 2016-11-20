@@ -1,0 +1,18 @@
+<tag1>
+  <path-count>5</path-count>
+  <path1>path1/temp1</path1>
+  <path2>path2/temp2</path2>
+  <path3>path3/temp3</path3>
+  <path4>path4/temp4</path4>
+  <path5>path5/temp5</path5>
+</tag1>
+<tag2>
+  <path-count>3</path-count>
+  <path1>path1/temp1</path1>
+  <path2>path2/temp2</path2>
+  <path3>path3/temp3</path3>
+</tag2>
+<tag3>
+  <path-count>1</path-count>
+  <path1>path1/temp1</path1>
+</tag3>

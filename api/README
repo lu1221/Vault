@@ -1,0 +1,4 @@
+// Functional and strutural description of the current api directory
+//	File			Function		Description
+//	api.js			Core			Contains basic project apis
+//	node_modules		Plug-ins		Contains module for xml parser
