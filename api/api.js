@@ -1,5 +1,5 @@
 // File: apis.js
-// Description: 
+// Description:
 // 		Contains publicly available APIs used to access our file system
 // Modified Date:
 // 		2016/10/10
@@ -8,7 +8,7 @@
 //		VAR_*: Scalar variable
 //		CLS_*: Imported class variable
 //		OTH_*: Other type of variable
-
+//		lc_*: local variable
 
 // Import file system class for file IOs
 var CLS_fs = require( 'fs' );
@@ -21,7 +21,7 @@ var exports = module.exports = {};
 var getTags = function () {
 	// Set up search path
 	var path = '.';
-	
+
 	// Read file name from current directory
 	CLS_fs.readdir(path, function(err, items) {
 		for (var i=0; i<items.length; i++) {
