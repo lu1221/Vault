@@ -11,6 +11,9 @@
 //		lc_*:  local variable
 //		pmt_*: function parameters
 
+// Glocal constants
+const lc_path = '../database/tag.xml';
+
 // Import file system class for file IOs
 var CLS_fs = require( 'fs' );
 // Import xml2js node module for xml parsing
@@ -20,9 +23,7 @@ var parseXML = require('xml2js').parseString;
 var exports = module.exports = {};
 
 // apis definitions
-var api_getPathsByTag = function (pmt_tag) {
-	// WARNING: <TEMP> hard-coded path
-	var lc_path = '../database/tag.xml';
+var api_readTag = function (pmt_tag) {
 
 	// Read Tag.xml
 	CLS_fs.readFile(lc_path, 'utf8', function(err, data) {
@@ -32,10 +33,10 @@ var api_getPathsByTag = function (pmt_tag) {
 		var lc_xml = data;
 		// console.log(lc_xml);
 		// Convert xml raw data into JSON for processing
-		parseXML(lc_xml, function(err, result_JSON){
+		parseXML(lc_xml, function(err, lc_JSON){
 			// WARNING: <TEST> test output validity
 			// console.dir(JSON.stringify(result_JSON));
-			var lc_tagidx = -1;
+			var lc_tagIdx = -1;
 			pmt_tag_str= String(pmt_tag);
 
 			// *******************************<PERFMON>*************************************
@@ -43,19 +44,21 @@ var api_getPathsByTag = function (pmt_tag) {
 			// *****************************************************************************
 			// Search given tag (from usr) in program's tag list
 			// <PERFMON> Buffer tag list
-			var lc_tagArr_buf = (Object.keys(result_JSON.tag)).slice();
-			lc_tagidx  = lc_tagArr_buf.indexOf(pmt_tag_str);
-
-			
-
-			console.log(lc_tagidx);
+			var lc_tagArr_buf = (Object.keys(lc_JSON.tag)).slice();
+			lc_tagIdx  = lc_tagArr_buf.indexOf( pmt_tag_str );
+			lc_tagName = String( lc_tagArr_buf[lc_tagIdx] );
+			// Collect paths info associated with this tag
+			var lc_tagObj = lc_JSON.tag[lc_tagName][0];
+			var lc_pathNum = lc_tagObj.pathCount[0];
+			console.log(lc_pathNum);
+			console.log(lc_tagObj.path1[0]);
 
 			// <PERFMON> Pop found entry from array to prevent subsequent re-search
-			if( lc_tagidx > -1 ) {
-				lc_tagArr_buf.splice(lc_tagidx, 1);
+			if( lc_tagIdx > -1 ) {
+				lc_tagArr_buf.splice(lc_tagIdx, 1);
 			}
 		});
 	});
 }
 
-api_getPathsByTag('tag1');
+api_readTag('tag1');
