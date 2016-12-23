@@ -9,10 +9,13 @@
 //		CLS_*: Imported class variable
 //		OTH_*: Other type of variable
 //		lc_*:  local variable
+//		gb_*:  global variable
 //		pmt_*: function parameters
 
-// Glocal constants
+// Global constants
 const lc_path = '../database/tag.xml';
+// *TEST* Global database hosting tag info
+var gb_dbRoot = {};
 
 // Import file system class for file IOs
 var CLS_fs = require( 'fs' );
@@ -22,7 +25,44 @@ var parseXML = require('xml2js').parseString;
 // Export api list
 var exports = module.exports = {};
 
-// apis definitions
+/*
+
+* gb_dbRoot
+	* tag0
+		* pathCount
+		* path
+			* path[0] (order paths by their added time in the future?)
+				* content
+				* timestamp
+				* path[1]
+				* path[2]
+				* path[3]
+	* tag1
+	* tag2
+	* ..
+*/
+
+// "Atomic APIs"
+var atomic_DBinsertTag = function (gb_dbRoot, pmt_tag, pmt_path) {
+
+	// Insert tag name into dbRoot object as its keys if not exist
+	if( !(pmt_tag in gb_dbRoot) ){
+		// Set up path obj hosting actual path info and associated added timestamp
+		var lc_pathObj = { content:[pmt_path] };
+		lc_pathObj.timestampHumanReadable = (new Date()).toString();
+		lc_pathObj.timestamp = Date.now();
+		// Set up tag obj hosting path count and path array containing path objs
+		var lc_tmpPathArr = [];
+		lc_tmpPathArr[0] = lc_pathObj;
+		var lc_tagObj = {};
+		lc_tagObj.pathCount = 0;
+		lc_tagObj.path = lc_tmpPathArr;
+		gb_dbRoot[pmt_tag] = lc_tagObj.path;
+	}
+
+}
+
+// "Non-atomic APIs"
 var api_readTag = function (pmt_tag) {
 
 	// Read Tag.xml
@@ -40,7 +80,7 @@ var api_readTag = function (pmt_tag) {
 			pmt_tag_str= String(pmt_tag);
 
 			// *******************************<PERFMON>*************************************
-			// *** Search algorithm to implemented to take over the existing indexOf method
+			// *** Search algorithm to be implemented to take over the existing indexOf method
 			// *****************************************************************************
 			// Search given tag (from usr) in program's tag list
 			// <PERFMON> Buffer tag list
@@ -61,4 +101,7 @@ var api_readTag = function (pmt_tag) {
 	});
 }
 
-api_readTag('tag1');
+console.log( gb_dbRoot.test );
+atomic_DBinsertTag( gb_dbRoot, "test", "testpath" );
+// api_readTag('tag1');
+console.log( gb_dbRoot.test );
